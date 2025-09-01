@@ -80,6 +80,8 @@ export const docsData: DocNode[] = [
         children: [
           { id: "react-arborist-install", name: "설치 가이드", isLeaf: true, path: "/docs/react-arborist/installation" },
           { id: "react-arborist-guide", name: "사용 가이드", isLeaf: true, path: "/docs/react-arborist/guide" },
+          { id: "react-arborist-core", name: "핵심 개념", isLeaf: true, path: "/docs/react-arborist/core-concepts" },
+          { id: "react-arborist-api", name: "API 레퍼런스", isLeaf: true, path: "/docs/react-arborist/api" },
           { id: "react-arborist-level1", name: "Level 1 따라하기", isLeaf: true, path: "/docs/react-arborist/level-1-manual" },
           { id: "react-arborist-level2-manual", name: "Level 2 따라하기", isLeaf: true, path: "/docs/react-arborist/level-2-manual" },
           { id: "react-arborist-level2", name: "Level 2 실행하기", isLeaf: true, path: "/react-arborist/level-2" },
