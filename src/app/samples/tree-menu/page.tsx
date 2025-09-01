@@ -2,8 +2,8 @@
 
 import { useTree } from "@headless-tree/react";
 import { syncDataLoaderFeature, selectionFeature, hotkeysCoreFeature } from "@headless-tree/core";
-import type { ItemInstance, TreeInstance } from "@headless-tree/core";
-import React, { useState, useEffect } from "react";
+import type { ItemInstance } from "@headless-tree/core";
+import React from "react";
 
 const initialTreeData = {
   "package.json": { "//": "..." },
@@ -18,14 +18,14 @@ const initialTreeData = {
 };
 
 // Helper functions to work with tree data
-const getItemFromPath = (data: any, path: string): { name: string; isFolder: boolean } | null => {
+const getItemFromPath = (data: Record<string, unknown>, path: string): { name: string; isFolder: boolean } | null => {
   const parts = path.split('/').filter(Boolean);
-  let current = data;
+  let current: unknown = data;
   let name = path;
   
   for (const part of parts) {
-    if (current && typeof current === 'object' && current[part] !== undefined) {
-      current = current[part];
+    if (current && typeof current === 'object' && current !== null && part in current) {
+      current = (current as Record<string, unknown>)[part];
       name = part;
     } else {
       return null;
@@ -34,26 +34,26 @@ const getItemFromPath = (data: any, path: string): { name: string; isFolder: boo
   
   return {
     name,
-    isFolder: current && typeof current === 'object' && !current.hasOwnProperty('//')
+    isFolder: Boolean(current && typeof current === 'object' && current !== null && !Object.prototype.hasOwnProperty.call(current, '//'))
   };
 };
 
-const getChildrenFromPath = (data: any, path: string): string[] => {
+const getChildrenFromPath = (data: Record<string, unknown>, path: string): string[] => {
   if (!path) return Object.keys(data);
   
   const parts = path.split('/').filter(Boolean);
-  let current = data;
+  let current: unknown = data;
   
   for (const part of parts) {
-    if (current && typeof current === 'object' && current[part] !== undefined) {
-      current = current[part];
+    if (current && typeof current === 'object' && current !== null && part in current) {
+      current = (current as Record<string, unknown>)[part];
     } else {
       return [];
     }
   }
   
-  if (current && typeof current === 'object' && !current.hasOwnProperty('//')) {
-    return Object.keys(current).map(key => path ? `${path}/${key}` : key);
+  if (current && typeof current === 'object' && current !== null && !Object.prototype.hasOwnProperty.call(current, '//')) {
+    return Object.keys(current as Record<string, unknown>).map(key => path ? `${path}/${key}` : key);
   }
   
   return [];

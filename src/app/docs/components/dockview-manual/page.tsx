@@ -1,8 +1,7 @@
 
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
+import { DocCodeBlock } from "@/components/docs/CodeBlock";
+
 
 export default function DockviewManualPage() {
   return (
@@ -11,6 +10,51 @@ export default function DockviewManualPage() {
       <p className="text-lg text-muted-foreground">`Dockview`는 VS Code와 같은 복잡한 도킹 레이아웃을 웹 애플리케이션에 구현할 수 있도록 도와주는 전문 라이브러리입니다.</p>
 
       <hr className="my-8" />
+
+      <h2 id="advanced">심화 예제</h2>
+      <h3>1) 기본 패널 + 그룹 + 분할</h3>
+      <DocCodeBlock accent="none" code={`import { DockviewReact, DockviewReadyEvent } from 'dockview';
+const components = { default: () => <div style={{ padding: 8 }}>Hello Dockview</div> };
+export default function Demo() {
+  const onReady = (e: DockviewReadyEvent) => {
+    const { api } = e;
+    api.addPanel({ id: 'p1', component: 'default', title: 'Panel 1' });
+    api.addPanel({ id: 'p2', component: 'default', title: 'Panel 2', position: { referencePanel: 'p1', direction: 'right' } });
+  };
+  return <div style={{ height: 400 }}><DockviewReact components={components} onReady={onReady} /></div>;
+}`} />
+
+      <h3>2) 레이아웃 저장/복원</h3>
+      <DocCodeBlock accent="none" code={`function Demo() {
+  const [state, setState] = React.useState<any>(null);
+  const onReady = (e: DockviewReadyEvent) => {
+    // ... 패널 생성 등
+    // 저장: setState(e.api.toJSON())
+    // 복원: e.api.fromJSON(state)
+  };
+  return <DockviewReact components={components} onReady={onReady} />;
+}`} />
+
+      <h2 id="troubleshooting">트러블슈팅</h2>
+      <ul>
+        <li>높이 0 문제: Dockview 컨테이너 부모에 고정 높이(예: 400px)나 flex 레이아웃으로 크기를 부여하세요.</li>
+        <li>스타일 충돌: 전역 CSS가 탭/패널 스타일을 덮어쓰지 않도록 네이밍 충돌을 피하세요.</li>
+        <li>성능: 패널 내부에 가상 스크롤(예: 리스트) 사용 시, 리사이즈 이벤트에 맞춰 리렌더가 필요한지 확인하세요.</li>
+      </ul>
+
+      <h2 id="best-practices">베스트 프랙티스</h2>
+      <ul>
+        <li>컨테이너 크기를 먼저 확보한 뒤 Dockview를 마운트하세요.</li>
+        <li>패널 <code>id</code>는 충돌하지 않도록 네임스페이스를 두세요.</li>
+        <li>패널 콘텐츠는 독립적인 컴포넌트로 분리해 재사용성과 성능을 확보합니다.</li>
+      </ul>
+
+      <h2 id="performance">성능 최적화</h2>
+      <ul>
+        <li>무거운 패널은 지연 로딩하고, 보이지 않을 때는 렌더를 피합니다.</li>
+        <li>패널 내부 목록은 가상 스크롤을 사용하고, 리사이즈 처리에 디바운스를 적용합니다.</li>
+        <li>레이아웃 저장/복원 시 필요한 최소 정보만 보관합니다.</li>
+      </ul>
 
       <h2 id="dnd-kit-relation">`dnd-kit`과의 관계</h2>
       <p>결론부터 말하면, <strong>`Dockview`는 `dnd-kit`과 함께 사용되지 않습니다.</strong></p>

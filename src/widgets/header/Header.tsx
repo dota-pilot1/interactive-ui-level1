@@ -18,6 +18,7 @@ const topics: { title: string; slug: string; levels: number }[] = [
   { title: "Lexical Editor", slug: "lexical-editor", levels: 10 },
   { title: "Dockview", slug: "dockview", levels: 10 },
   { title: "Headless Tree", slug: "headless-tree", levels: 10 },
+  { title: "React Arborist", slug: "react-arborist", levels: 10 },
 ];
 
 const sampleTopics: { title: string; href: string }[] = [
@@ -76,23 +77,10 @@ export const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Docs Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost">Docs</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem asChild>
-              <Link href="/docs/dnd-kit-manual">dnd-kit 기본 가이드</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/docs/dockview-manual">Dockview 기본 가이드</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/docs/tree-menu-manual">트리 메뉴 구현 방법론</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Docs Link */}
+        <Button variant="ghost" asChild>
+          <Link href="/docs">Docs</Link>
+        </Button>
       </nav>
       <div className="w-1/4"></div>
     </header>

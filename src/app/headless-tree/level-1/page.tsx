@@ -1,9 +1,13 @@
 "use client";
 
 import { useTree } from "@headless-tree/react";
-import { syncDataLoaderFeature, selectionFeature, hotkeysCoreFeature } from "@headless-tree/core";
-import type { ItemInstance, TreeInstance } from "@headless-tree/core";
-import React, { useState, useEffect } from "react";
+import {
+  syncDataLoaderFeature,
+  selectionFeature,
+  hotkeysCoreFeature,
+} from "@headless-tree/core";
+import type { ItemInstance } from "@headless-tree/core";
+import React from "react";
 
 const initialTreeData = {
   "package.json": { "//": "..." },
@@ -18,44 +22,48 @@ const initialTreeData = {
 };
 
 // Helper functions to work with tree data
-const getItemFromPath = (data: any, path: string): { name: string; isFolder: boolean } | null => {
-  const parts = path.split('/').filter(Boolean);
-  let current = data;
+const getItemFromPath = (
+  data: Record<string, unknown>,
+  path: string,
+): { name: string; isFolder: boolean } | null => {
+  const parts = path.split("/").filter(Boolean);
+  let current: unknown = data;
   let name = path;
-  
+
   for (const part of parts) {
-    if (current && typeof current === 'object' && current[part] !== undefined) {
-      current = current[part];
+    if (current && typeof current === "object" && current !== null && part in current) {
+      current = (current as Record<string, unknown>)[part];
       name = part;
     } else {
       return null;
     }
   }
-  
+
   return {
     name,
-    isFolder: current && typeof current === 'object' && !current.hasOwnProperty('//')
+    isFolder:
+      Boolean(current && typeof current === "object" && current !== null && !Object.prototype.hasOwnProperty.call(current, "//")),
   };
 };
 
-const getChildrenFromPath = (data: any, path: string): string[] => {
+const getChildrenFromPath = (data: Record<string, unknown>, path: string): string[] => {
   if (!path) return Object.keys(data);
-  
-  const parts = path.split('/').filter(Boolean);
-  let current = data;
-  
+
+  const parts = path.split("/").filter(Boolean);
+  let current: unknown = data;
+
   for (const part of parts) {
-    if (current && typeof current === 'object' && current[part] !== undefined) {
-      current = current[part];
+    if (current && typeof current === "object" && current !== null && part in current) {
+      current = (current as Record<string, unknown>)[part];
     } else {
       return [];
     }
   }
-  
-  if (current && typeof current === 'object' && !current.hasOwnProperty('//')) {
-    return Object.keys(current).map(key => path ? `${path}/${key}` : key);
+
+  if (current && typeof current === "object" && current !== null && !Object.prototype.hasOwnProperty.call(current, "//")) {
+    return Object.keys(current as Record<string, unknown>).map((key) => (path ? `${path}/${key}` : key));
   }
-  
+
   return [];
 };
 
@@ -93,12 +101,13 @@ export default function HeadlessTreeLevel1() {
     },
     dataLoader: {
       getItem: (itemId: string) => itemId,
-      getChildren: (itemId: string) => getChildrenFromPath(initialTreeData, itemId)
+      getChildren: (itemId: string) =>
+        getChildrenFromPath(initialTreeData, itemId),
     },
     features: [syncDataLoaderFeature, selectionFeature, hotkeysCoreFeature],
     initialState: {
-      expandedItems: ["src"]
-    }
+      expandedItems: ["src"],
+    },
   });
 
   // Get all items for rendering
@@ -111,9 +120,13 @@ export default function HeadlessTreeLevel1() {
           Headless Tree - Level 1
         </h1>
         <p className="text-muted-foreground text-center mb-8">
-          Basic file explorer tree implementation. Click on folders to expand and collapse them.
+          Basic file explorer tree implementation. Click on folders to expand
+          and collapse them.
         </p>
-        <div {...tree.getContainerProps()} className="p-4 bg-white border rounded-lg">
+        <div
+          {...tree.getContainerProps()}
+          className="p-4 bg-white border rounded-lg"
+        >
           {items.map((item) => (
             <TreeItem key={item.getId()} item={item} />
           ))}
