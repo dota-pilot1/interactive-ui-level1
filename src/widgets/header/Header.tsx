@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -50,6 +51,12 @@ export const Header = () => {
               <Button variant="ghost">{topic.title}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="max-h-96 overflow-y-auto">
+              <DropdownMenuItem asChild>
+                <Link href={`/${topic.slug}`} className="font-semibold text-blue-600">
+                  📚 {topic.title} 소개 & 참고자료
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               {Array.from({ length: topic.levels }, (_, i) => i + 1).map(
                 (level) => (
                   <DropdownMenuItem key={level} asChild>
