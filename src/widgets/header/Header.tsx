@@ -26,9 +26,14 @@ export const Header = () => {
           <Link href={`/${arboristTopic.slug}`}>{arboristTopic.title}</Link>
         </Button>
 
-        {/* Libraries List Page */}
+        {/* Libraries (React) */}
         <Button variant="ghost" asChild>
-          <Link href="/libraries">Libraries</Link>
+          <Link href="/libraries">Libraries (React)</Link>
+        </Button>
+
+        {/* Libraries (Vue) */}
+        <Button variant="ghost" asChild>
+          <Link href="/libraries/vue">Libraries (Vue)</Link>
         </Button>
 
         {/* Docs Link */}
