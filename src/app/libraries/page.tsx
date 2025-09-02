@@ -6,6 +6,7 @@ type Library = {
   slug: string;
   description: string;
   levels: number; // how many level pages exist
+  docsHref?: string; // optional external/internal docs link
 };
 
 const libraries: Library[] = [
@@ -51,6 +52,27 @@ const libraries: Library[] = [
     description: "헤드리스 트리 구성요소로 커스텀 트리/네비게이션 구현",
     levels: 1,
   },
+  {
+    title: "React Flow",
+    slug: "react-flow",
+    description: "노드 기반 플로우/그래프 UI를 직관적으로 구현하는 라이브러리",
+    levels: 0,
+    docsHref: "https://reactflow.dev/learn/",
+  },
+  {
+    title: "React Virtualized",
+    slug: "react-virtualized",
+    description: "대용량 리스트/그리드 가상 스크롤링 라이브러리",
+    levels: 0,
+    docsHref: "https://github.com/bvaughn/react-virtualized",
+  },
+  {
+    title: "React Window",
+    slug: "react-window",
+    description: "가벼운 대체: 간단한 가상 스크롤 컴포넌트",
+    levels: 0,
+    docsHref: "https://github.com/bvaughn/react-window",
+  },
 ];
 
 export default function LibrariesPage() {
@@ -69,15 +91,25 @@ export default function LibrariesPage() {
           >
             <h2 className="text-xl font-semibold mb-2">{lib.title}</h2>
             <p className="text-sm text-muted-foreground mb-4">{lib.description}</p>
-            <div className="grid grid-cols-5 gap-2 mb-4">
-              {Array.from({ length: lib.levels }, (_, i) => i + 1).map((level) => (
-                <Button key={level} variant="outline" size="sm" asChild>
-                  <Link href={`/${lib.slug}/level-${level}`}>Lv {level}</Link>
-                </Button>
-              ))}
-            </div>
+            {lib.levels > 0 ? (
+              <div className="grid grid-cols-5 gap-2 mb-4">
+                {Array.from({ length: lib.levels }, (_, i) => i + 1).map((level) => (
+                  <Button key={level} variant="outline" size="sm" asChild>
+                    <Link href={`/${lib.slug}/level-${level}`}>Lv {level}</Link>
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground mb-4">레벨 예제 준비중</p>
+            )}
             <Button variant="secondary" asChild>
-              <Link href={`/docs/${lib.slug}/installation`}>설치/문서</Link>
+              <Link
+                href={lib.docsHref ?? `/docs/${lib.slug}/installation`}
+                target={lib.docsHref?.startsWith("http") ? "_blank" : undefined}
+                rel={lib.docsHref?.startsWith("http") ? "noreferrer" : undefined}
+              >
+                설치/문서
+              </Link>
             </Button>
           </div>
         ))}

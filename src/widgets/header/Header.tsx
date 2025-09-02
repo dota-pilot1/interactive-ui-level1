@@ -3,13 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// Dropdown components removed from header usage
 
 // Keep header minimal: React Arborist dropdown + Libraries + Docs
 const arboristTopic: { title: string; slug: string; levels: number } = {
